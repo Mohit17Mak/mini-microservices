@@ -50,7 +50,7 @@ public class CourseController {
         
         publisher.publish(new EnrollmentEvent(courseId, studentId, student.name()));
         return Map.of(
-                "message", "Enrolment successful!",
+                "message", "Enrollment successfull!",
                 "course", course.title(),
                 "student", student.name(),
                 "email", student.email()
