@@ -20,9 +20,11 @@ public class CourseController {
     );
 
     private final StudentClient studentClient;   // our connection!
+    private final EnrollmentPublisher publisher;
 
-    public CourseController(StudentClient studentClient) {
+    public CourseController(StudentClient studentClient, EnrollmentPublisher publisher) {
         this.studentClient = studentClient;      // Spring injects it
+        this.publisher = publisher;
     }
 
     // GET http://localhost:8082/courses
@@ -45,7 +47,8 @@ public class CourseController {
         // Looks like a normal method call, but travels over the network
         // to student-service (found via Eureka, guarded by circuit breaker).
         StudentDto student = studentClient.getStudent(studentId);
-
+        
+        publisher.publish(new EnrollmentEvent(courseId, studentId, student.name()));
         return Map.of(
                 "message", "Enrolment successful!",
                 "course", course.title(),
